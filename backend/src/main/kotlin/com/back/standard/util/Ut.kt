@@ -45,5 +45,22 @@ class Ut {
                 connection.disconnect()
             }
         }
+
+        fun headers(urlStr: String): Map<String, *> {
+            val uri = URI(urlStr)
+            val connection = uri.toURL().openConnection() as HttpURLConnection
+
+            return try {
+                connection.instanceFollowRedirects = true
+                connection.responseCode // 이게 있어야 실제 최종 url까지 redirect 됨
+
+                connection.headerFields
+                    .mapValues { (_, v) ->
+                        if (v.size == 1) v[0] else v
+                    }
+            } finally {
+                connection.disconnect()
+            }
+        }
     }
 }

@@ -21,4 +21,13 @@ class FileUtTest {
 
         assertThat(finalUrl).startsWith("https://fastly.picsum.photos/id/237/200/300.jpg?hmac=")
     }
+
+    @Test
+    @DisplayName("headers")
+    fun t3() {
+        val headers = Ut.file.headers("https://picsum.photos/id/237/200/300")
+
+        assertThat(headers["Content-Type"]).isEqualTo("image/jpeg")
+        assertThat(headers["Content-Disposition"]).isEqualTo("inline; filename=\"237-200x300.jpg\"")
+    }
 }

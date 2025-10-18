@@ -1,5 +1,7 @@
 package com.back.standard.util
 
+import java.net.HttpURLConnection
+import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Paths
 
@@ -27,6 +29,20 @@ class Ut {
             // 파일이 존재하면 삭제
             if (Files.exists(path)) {
                 Files.delete(path)
+            }
+        }
+
+        fun finalUrl(urlStr: String): String {
+            val uri = URI(urlStr)
+            val connection = uri.toURL().openConnection() as HttpURLConnection
+
+            return try {
+                connection.instanceFollowRedirects = true
+                connection.responseCode // 이게 있어야 실제 최종 url까지 redirect 됨
+
+                connection.url.toString()
+            } finally {
+                connection.disconnect()
             }
         }
     }
